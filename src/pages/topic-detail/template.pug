@@ -1,0 +1,17 @@
+div
+  pre topic-detail
+  //- pre {{ topic }}
+  h3 Name: {{ topic.name }}
+  h4 Configs
+  pre {{ topic.configs }}
+  h4 {{ topic.partitions }} Partitions
+
+  label.checkbox-inline
+    input(type='checkbox' v-bind:checked='allChecked', v-on:change='switchAllChecked')
+    span ALL
+  label.checkbox-inline(v-for='partition in partitions')
+    input(type='checkbox' v-model='partition.show')
+    span {{ partition.id }}
+
+  //- div {{ filterPartitions | json }}
+  topic-offset(v-bind:topic='topic.name', v-bind:partitions='filterPartitions')

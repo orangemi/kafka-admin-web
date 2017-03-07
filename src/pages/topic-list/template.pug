@@ -1,0 +1,9 @@
+div
+  h3 Topics List
+  table.table
+    thead: tr
+      th Topic
+      th Action
+    tbody: tr(v-for='topic in topics')
+      td: router-link(:to='{name: "topic-detail", params: {topic: topic}}') {{ topic }}
+      td Detail
