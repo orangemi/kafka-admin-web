@@ -1,0 +1,59 @@
+<html>
+  <head>
+    <title>InfluxDB Custom Interface Example</title>
+    <script src="http://code.jquery.com/jquery-2.0.3.min.js" type="text/javascript"></script>
+    <script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+    <script src="http://influxdb.org/javascripts/vendor/rickshaw.js" type="text/javascript"></script>
+    <script src="example.js" type="text/javascript"></script>
+
+    <link href="http://influxdb.org/stylesheets/vendor/rickshaw.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css" media="screen" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h1>Important Dashboard</h1>
+          <div id="chart_container">
+            <div id="y_axis"></div>
+            <div id="x_axis"></div>
+            <div id="chart"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      $(function() {
+        $("input").click(function() {
+          parent.influxdb.query("SELECT COUNT(message) FROM posts WHERE time > now() - 365d GROUP BY time(24h);", function(points) {
+            var data = points.map(function(point) {
+              return { x: point.time / 1000, y: point.count };
+            }).reverse();
+
+            var graph = new Rickshaw.Graph({
+              element: document.querySelector("#chart"),
+              width: 1100,
+              height: 200,
+              renderer: 'line',
+              series: [{ data: data, color: 'steelblue' }]
+            });
+
+            var xAxis = new Rickshaw.Graph.Axis.Time({ graph: graph });
+            var yAxis = new Rickshaw.Graph.Axis.Y({
+              graph: graph,
+              orientation: 'left',
+              element: document.getElementById('y_axis')
+            });
+
+            xAxis.render();
+            yAxis.render();
+            graph.render();
+          });
+        });
+      });
+    </script>
+
+
+  </body>
+</html>
