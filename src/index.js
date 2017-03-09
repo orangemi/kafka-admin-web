@@ -17,7 +17,7 @@ Home.router = new VueRouter({
     component: resolve => require(['pages/topic-list'], resolve)
   }, {
     name: 'topic-detail',
-    path: '/topic/:topic',
+    path: '/topics/:topic',
     component: resolve => require(['pages/topic-detail'], resolve)
   }]
 })

@@ -1,17 +1,63 @@
 div
-  pre topic-detail
-  //- pre {{ topic }}
-  h3 Name: {{ topic.name }}
+  h3 Topic >> {{ topic.name }}
   h4 Configs
   pre {{ topic.configs }}
   h4 {{ topic.partitions }} Partitions
 
+  h4 Partition Offsets
   label.checkbox-inline
-    input(type='checkbox' v-bind:checked='allChecked', v-on:change='switchAllChecked')
+    input(type='checkbox' v-bind:checked='allCheckedPartitions', v-on:change='switchAllCheckedPartitions')
     span ALL
-  label.checkbox-inline(v-for='partition in partitions')
+  label.checkbox-inline(v-for='partition in displayPartitions')
     input(type='checkbox' v-model='partition.show')
     span {{ partition.id }}
+  br
+  label.checkbox-inline
+    input(type='checkbox' v-bind:checked='allCheckedConsumers', v-on:change='switchAllCheckedConsumers')
+    span ALL
+  label.checkbox-inline(v-for='consumer in consumers')
+    input(type='checkbox' v-model='consumer.show')
+    span {{ consumer.group }}
 
   //- div {{ filterPartitions | json }}
-  topic-offset(v-bind:topic='topic.name', v-bind:partitions='filterPartitions')
+  topic-offset(v-bind:topic='topic.name', v-bind:partitions='filterPartitions', v-bind:consumers='filterConsumers')
+
+  h4 Replicas
+  table.table
+    thead: tr
+      th Partition
+      th beginOffset
+      th endOffset
+      th leaderBroker
+      th replicas
+    tbody: tr(v-for='partition in partitions')
+      td {{ partition.id }}
+      td {{ partition.beginOffset }}
+      td {{ partition.endOffset }}
+      td {{ partition.leader }}
+      td {{ partition.replicas }}
+
+  div
+  h4 Broker Topic Metrics
+    span brokers:
+    label.radiobox-inline(v-for='_broker in brokers')
+      input(type='radio' v-model='broker' v-bind:value='_broker', v-on:change='fetchBrokerMetrics(broker)')
+      span {{ _broker }}
+
+  table.table
+    thead: tr
+      th From
+      th Type
+      th Name
+      th Partition
+      th Value / 1MinRate
+      th Unit
+    tbody: tr(v-for='brokerMetric in brokerMetrics')
+      td {{ brokerMetric.from }}
+      td {{ brokerMetric.type }}
+      td {{ brokerMetric.name }}
+      td {{ brokerMetric.partition }}
+      td {{ brokerMetric.OneMinuteRate || brokerMetric.Value || 0 }}
+      td {{ brokerMetric.EventType ? brokerMetric.EventType + '/' + brokerMetric.RateUnit : '' }}
+
+  h4 Consumers
