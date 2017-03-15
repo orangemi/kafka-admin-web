@@ -1,9 +1,8 @@
 div
-  h3 Topics List
-  table.table
-    thead: tr
-      th Topic
-      th Action
-    tbody: tr(v-for='topic in topics')
-      td: router-link(:to='{name: "topic-detail", params: {topic: topic}}') {{ topic }}
-      td Detail
+  .form-group
+    input.form-control(v-model='topicName' placeholder='topic name ...')
+  table.table.table-hover
+    tbody: tr(v-for='topic in topics_')
+      router-link(tag='td' v-bind:to='{name: "topic-detail", params: {topic: topic}}')
+        router-link(v-bind:to='{name: "topic-detail", params: {topic: topic}}') {{ topic }}
+  

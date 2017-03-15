@@ -1,0 +1,27 @@
+div
+  //- pre {{ brokers }}
+  //- pre {{ brokerMetrics }}
+  .form-group
+    select.form-control(v-model.number='brokerFilter')
+      option(value='') All Broker
+      option(v-for='broker in brokers') {{ broker }}
+  .form-group
+    input.form-control(v-model='metricsFilter' placeholder='filter ...')
+  table.table.table-hover
+    thead: tr
+      td Broker
+      td Name
+      td Value
+      td Unit
+      td Total
+      td Show
+    tbody
+      tr(v-for='brokerMetric in brokerMetrics_')
+        td {{ brokerMetric.broker }}
+        td {{ brokerMetric.name }}
+        td {{ brokerMetric.Value || brokerMetric.OneMinuteRate }}
+        td {{ brokerMetric.EventType }} / {{ brokerMetric.RateUnit }}
+        td {{ brokerMetric.Count }}
+        td: bt-switch(v-model='brokerMetric.show')
+  time-line-chart(v-bind:sqls='sqls')
+  pre {{ sqls }}

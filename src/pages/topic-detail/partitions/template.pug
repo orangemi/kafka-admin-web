@@ -1,0 +1,27 @@
+div
+  //- pre {{ brokers }}
+  //- pre {{ brokerMetrics }}
+  .form-group
+    select.form-control(v-model.number='partitionFilter')
+      option(value='') All Partitions
+      //- option(v-for='broker in brokers') {{ broker }}
+  table.table.table-hover
+    thead: tr
+      th Partition
+      th Start
+      th End
+      th Leader
+      th Replicas
+      th Show Begin
+      th Show End
+    tbody
+      tr(v-for='partition in partitions_')
+        td {{ partition.id }}
+        td {{ partition.beginOffset }}
+        td {{ partition.endOffset }}
+        td {{ partition.leader }}
+        td {{ partition.replicas.length }}
+        td: bt-switch(v-model='partition.showBeginOffset')
+        td: bt-switch(v-model='partition.showEndOffset')
+  time-line-chart(v-bind:sqls='sqls')
+  pre {{ sqls }}

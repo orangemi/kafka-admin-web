@@ -11,18 +11,42 @@ module.exports = template({
   },
   data: () => ({
     partitions: [],
-    consumers: []
+    consumers: [],
+    showBegin: true,
+    showEnd: true
   }),
   computed: {
+    beginOffset () {
+      let sum = 0
+      this.partitions.forEach(p => {
+        sum += p.beginOffset
+      })
+      return sum
+    },
+    endOffset () {
+      let sum = 0
+      this.partitions.forEach(p => {
+        sum += p.endOffset
+      })
+      return sum
+    },
     sqls () {
       let topic = this.$route.params.topic
       let result = {}
       let limit = 5
-      this.partitions.filter((p, i) => p.show && i < limit).forEach(p => {
-        result[`TP:${topic}-${p.id}-end`] = `SELECT mean("endOffset") FROM "topic-offsets" WHERE "topic" = '${topic}' AND "partition" = '${p.id}' AND time > now() - 1h GROUP BY time(1m)`
-      })
+
+      // let w = this.partitions.filter((p, i) => p.show).map(p => `"partition" = '${p.id}'`)
+      // w.unshift(`"topic" = '${topic}'`)
+      // w = w.join(' AND ')
+      let w = `"topic" = '${topic}'`
+
+      if (this.showBegin) result[`Topic:${topic}-begin`] = `SELECT mean("beginOffset") FROM "topic-offsets" WHERE ${w} AND time > now() - 1h GROUP BY time(1m)`
+      if (this.showEnd) result[`Topic:${topic}-end`] = `SELECT mean("endOffset") FROM "topic-offsets" WHERE ${w} AND time > now() - 1h GROUP BY time(1m)`
+      // this.partitions.filter((p, i) => p.show && i < limit).forEach(p => {
+      //   result[`TP:${topic}-${p.id}-end`] = `SELECT mean("endOffset") FROM "topic-offsets" WHERE "topic" = '${topic}' AND "partition" = '${p.id}' AND time > now() - 1h GROUP BY time(1m)`
+      // })
       this.consumers.filter((c, i) => c.show && i < limit).forEach(c => {
-        result[`C:${c.consumer}-${c.partition}`] = `SELECT mean("offset") FROM "consumer-offsets" WHERE "group"='${c.consumer}' AND "topic" = '${topic}' AND "partition" = '${c.partition}' AND time > now() - 1h GROUP BY time(1m)`
+        result[`Consumer:${c.consumer}`] = `SELECT mean("offset") FROM "consumer-offsets" WHERE "group"='${c.consumer}' AND ${w} AND time > now() - 1h GROUP BY time(1m)`
       })
       return result
     }
@@ -38,23 +62,23 @@ module.exports = template({
       axios.get('api/topics/' + topicName + '/partitions').then(resp => {
         this.partitions = resp.data.map(d => Object.assign({show: true}, d))
       })
-      axios.get('api/consumers2').then(resp => {
+      axios.get(`api/topics/${topicName}/consumers2`).then(resp => {
         resp.data.map(consumer => {
           axios.get('api/consumers2/' + consumer).then(resp => {
+            let offset = 0
             let offsets = resp.data
-            let consumers = Object
+            Object
               .keys(offsets)
               .filter(tp => tp.replace(/-\d+$/, '') === topicName)
-              .map(tp => ({
-                consumer: consumer,
-                topic: tp.replace(/-\d+$/, ''),
-                partition: Number(tp.replace(/^.*-/, '')),
-                offset: offsets[tp],
-                expireTime: new Date(), // TODO
-                commitTime: new Date(), // TODO
-                show: true
-              }))
-            consumers.forEach(consumer => this.consumers.push(consumer))
+              .forEach(tp => {
+                offset += offsets[tp]
+              })
+            this.consumers.push({
+              consumer: consumer,
+              topic: topicName,
+              offset: offset,
+              show: true
+            })
           })
         })
       })

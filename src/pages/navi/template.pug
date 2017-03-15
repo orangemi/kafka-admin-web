@@ -1,3 +1,11 @@
-div
-  ul
-    li: router-link(:to='{name: "topic-list"}') Topics
+header
+  nav.navbar.navbar-default.navbar-static-top
+    .container_fluid
+      .navbar-header
+        span.navbar-brand Kafka Admin 1.0
+      .collapse.navbar-collapse
+        ul.nav.navbar-nav
+          li.active: router-link(v-bind:to='{name: "topic-list"}') Topics
+          li: a Brokers
+          li: a Consumers
+          li: a Zookeepers

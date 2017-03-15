@@ -7,7 +7,7 @@ const CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin
 module.exports = {
   entry: {
     main: './src',
-    vendor: ['axios', 'vue', 'vue-router', 'chart.js', 'moment', 'bootstrap/less/bootstrap.less']
+    vendor: ['axios', 'vue', 'vue-router', 'chart.js', 'moment', 'bootstrap/less/bootstrap.less', 'bootstrap/less/theme.less']
   },
   output: {
     filename: '[name].bundle.js',

@@ -357,3 +357,6 @@
 .has-switch span.switch-danger.active {
   background-color: #e9322d \9;
 }
+.switch {
+  height: 30px;
+}
