@@ -1,15 +1,17 @@
 'use strict'
 const axios = require('axios')
 const template = require('./template.pug')
-
-require('./style.styl')
 // const topicOffset = require('./topic-offset')
-// const timeLineChart = require('pages/time-line-chart')
+const timeLineChart = require('./time-line-chart')
 // const Bar
 
 module.exports = template({
+  components: {
+    // 'topic-offset': topicOffset,
+    'time-line-chart': timeLineChart
+  },
   data: () => ({
-    // topic: {},
+    topic: {},
     partitions: [],
     displayPartitions: [],
     allPartition: true,
@@ -26,9 +28,6 @@ module.exports = template({
     this.fetchData()
   },
   computed: {
-    topic () {
-      return this.$route.params.topic
-    },
     filterPartitions () {
       return this.displayPartitions.filter(p => p.show).map(p => p.id)
     },
@@ -66,24 +65,24 @@ module.exports = template({
       })
     },
     fetchData () {
-      // this.topic = {}
-      // this.displayPartitions = []
-      // let topicName = this.$route.params.topic
-      // axios.get('api/topics/' + topicName).then(resp => {
-      //   this.topic = resp.data
-      //   for (let i = 0; i < this.topic.partitions; i++) this.displayPartitions.push({id: i, show: true})
-      // })
-      // axios.get('api/topics/' + topicName + '/partitions').then(resp => {
-      //   this.partitions = resp.data
-      // })
+      this.topic = {}
+      this.displayPartitions = []
+      let topicName = this.$route.params.topic
+      axios.get('api/topics/' + topicName).then(resp => {
+        this.topic = resp.data
+        for (let i = 0; i < this.topic.partitions; i++) this.displayPartitions.push({id: i, show: true})
+      })
+      axios.get('api/topics/' + topicName + '/partitions').then(resp => {
+        this.partitions = resp.data
+      })
 
-      // // fetch broker info
-      // axios.get('api/brokers').then(resp => {
-      //   this.brokers = resp.data
-      //   this.fetchBrokerMetrics(this.brokers[1])
-      // })
+      // fetch broker info
+      axios.get('api/brokers').then(resp => {
+        this.brokers = resp.data
+        this.fetchBrokerMetrics(this.brokers[1])
+      })
 
-      // this.consumers = []
+      this.consumers = []
       // axios.get('api/consumers2').then(resp => {
       //   let consumers = resp.data
       //   Promise.all(consumers.map(consumer => axios.get('api/consumers2/' + consumer + '/topics').then(resp => {

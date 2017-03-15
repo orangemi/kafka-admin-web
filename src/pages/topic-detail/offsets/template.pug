@@ -1,0 +1,42 @@
+div
+  h4 Partition Offsets
+  dl
+    dd.col-md-2.col-sm-4.card.partition-breif(v-for='partition in partitions')
+      div.row(alt='begin offset')
+        span.glyphicon.glyphicon-triangle-left
+        span Begin: 
+        span.number {{ partition.beginOffset }}
+      div.row(alt='end offset')
+        span.glyphicon.glyphicon-triangle-right
+        span End: 
+        span.number {{ partition.endOffset }}
+      div.row
+        span.glyphicon.glyphicon-registration-mark
+        span Replicas: 
+        span {{ partition.replicas.length }}
+      div.row
+        span.glyphicon.glyphicon-registration-mark
+        span Leader: 
+        span {{ partition.leader }}
+      bt-switch(v-model='partition.show')
+  .clearfix
+  h4 Consumer Offsets
+  dl
+    dd.col-md-2.col-sm-4.card.consumer-breif(v-for='consumer in consumers')
+      div.row(alt='consumer')
+        span.glyphicon.glyphicon-triangle-right
+        span {{ consumer.consumer }}
+      div.row(alt='partition')
+        span.glyphicon.glyphicon-triangle-right
+        span Partition: 
+        span.number {{ consumer.partition }}
+      div.row(alt='offset')
+        span.glyphicon.glyphicon-triangle-right
+        span Offset: 
+        span.number {{ consumer.offset }}
+      bt-switch(v-model='consumer.show')
+
+  time-line-chart(v-bind:sqls='sqls')
+  pre {{ partitions }}
+  pre {{ consumers }}
+  pre {{ sqls }}

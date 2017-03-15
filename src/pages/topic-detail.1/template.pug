@@ -1,0 +1,42 @@
+
+  
+
+  h4 Replicas
+  table.table
+    thead: tr
+      th Partition
+      th beginOffset
+      th endOffset
+      th leaderBroker
+      th replicas
+    tbody: tr(v-for='partition in partitions')
+      td {{ partition.id }}
+      td {{ partition.beginOffset }}
+      td {{ partition.endOffset }}
+      td {{ partition.leader }}
+      td {{ partition.replicas }}
+
+  div
+  h4 Broker Topic Metrics
+    span brokers:
+    label.radiobox-inline(v-for='_broker in brokers')
+      input(type='radio' v-model='broker' v-bind:value='_broker', v-on:change='fetchBrokerMetrics(broker)')
+      span {{ _broker }}
+
+  table.table
+    thead: tr
+      th From
+      th Type
+      th Name
+      th Partition
+      th Value / 1MinRate
+      th Unit
+    tbody: tr(v-for='brokerMetric in brokerMetrics')
+      td {{ brokerMetric.from }}
+      td {{ brokerMetric.type }}
+      td {{ brokerMetric.name }}
+      td {{ brokerMetric.partition }}
+      td {{ brokerMetric.OneMinuteRate || brokerMetric.Value || 0 }}
+      td {{ brokerMetric.EventType ? brokerMetric.EventType + '/' + brokerMetric.RateUnit : '' }}
+
+  h4 Consumers
