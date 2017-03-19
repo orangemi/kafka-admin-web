@@ -1,12 +1,15 @@
 div
   h3 {{ topic }}
   nav.navbar.navbar-default.navbar-static-top
-    .container_fluid
-      .collapse.navbar-collapse
-        ul.nav.navbar-nav
-          li(v-bind:class='{active: child == "configs"}'): router-link(v-bind:to='{name: "topic-detail-configs", params: {topic: topic}}') Configs
-          li(v-bind:class='{active: child == "offsets"}'): router-link(v-bind:to='{name: "topic-detail-offsets", params: {topic: topic}}') Offsets
-          li(v-bind:class='{active: child == "partitions"}'): router-link(v-bind:to='{name: "topic-detail-partitions", params: {topic: topic}}') Partitions
-          li(v-bind:class='{active: child == "broker-partitions"}'): router-link(v-bind:to='{name: "topic-detail-broker-partitions", params: {topic: topic}}') Broker Partitions
-          li(v-bind:class='{active: child == "metrics"}'): router-link(v-bind:to='{name: "topic-detail-metrics", params: {topic: topic}}') Metrics
+    .container_fluid: .collapse.navbar-collapse: ul.nav.navbar-nav
+      li(v-bind:class='{active: child == "configs"}')
+        router-link(v-bind:to='{name: "topic-detail-configs", params: {topic: topic}}') Configs
+      li(v-bind:class='{active: child == "offsets"}')
+        router-link(v-bind:to='{name: "topic-detail-offsets", params: {topic: topic}}') Offsets
+      li(v-bind:class='{active: child == "partitions"}')
+        router-link(v-bind:to='{name: "topic-detail-partitions", params: {topic: topic}}') Partitions
+      li(v-bind:class='{active: child == "broker-partitions"}')
+        router-link(v-bind:to='{name: "topic-detail-broker-partitions", params: {topic: topic}}') Broker Partitions
+      li(v-bind:class='{active: child == "metrics"}')
+        router-link(v-bind:to='{name: "topic-detail-metrics", params: {topic: topic}}') Metrics
   <router-view></router-view>

@@ -1,0 +1,11 @@
+div
+  h3 Broker {{ broker }}
+  nav.navbar.navbar-default.navbar-static-top
+    .container_fluid: .collapse.navbar-collapse: ul.nav.navbar-nav
+      li(v-bind:class='{active: child == "configs"}')
+        router-link(v-bind:to='{name: "broker-detail-configs", params: {broker: broker}}') Configs
+      li(v-bind:class='{active: child == "request"}')
+        router-link(v-bind:to='{name: "broker-detail-request", params: {broker: broker}}') Requests
+      li(v-bind:class='{active: child == "metrics"}')
+        router-link(v-bind:to='{name: "broker-detail-metrics", params: {broker: broker}}') Metrics
+  <router-view></router-view>

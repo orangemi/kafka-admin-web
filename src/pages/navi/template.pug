@@ -5,10 +5,11 @@ header
         span.navbar-brand Kafka Admin 1.0
       .collapse.navbar-collapse
         ul.nav.navbar-nav
-          li(v-bind:class='{active: child == "topic-list"}')
+          li(v-bind:class='{active: child == "topics"}')
             router-link(v-bind:to='{name: "topic-list"}') Topics
-          li(v-bind:class='{active: child == "partition-list"}')
+          li(v-bind:class='{active: child == "partitions"}')
             router-link(v-bind:to='{name: "partition-list"}') Partitions
-          li: a Brokers
+          li(v-bind:class='{active: child == "brokers"}')
+            router-link(v-bind:to='{name: "broker-list"}') Brokers
           li: a Consumers
           li: a Zookeepers

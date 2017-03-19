@@ -33,7 +33,6 @@ module.exports = template({
     sqls () {
       let topic = this.$route.params.topic
       let result = {}
-      let limit = 5
 
       // let w = this.partitions.filter((p, i) => p.show).map(p => `"partition" = '${p.id}'`)
       // w.unshift(`"topic" = '${topic}'`)
@@ -45,7 +44,7 @@ module.exports = template({
       // this.partitions.filter((p, i) => p.show && i < limit).forEach(p => {
       //   result[`TP:${topic}-${p.id}-end`] = `SELECT mean("endOffset") FROM "topic-offsets" WHERE "topic" = '${topic}' AND "partition" = '${p.id}' AND time > now() - 1h GROUP BY time(1m)`
       // })
-      this.consumers.filter((c, i) => c.show && i < limit).forEach(c => {
+      this.consumers.filter(c => c.show).forEach(c => {
         result[`Consumer:${c.consumer}`] = `SELECT mean("offset") FROM "consumer-offsets" WHERE "group"='${c.consumer}' AND ${w} AND time > now() - 1h GROUP BY time(1m)`
       })
       return result

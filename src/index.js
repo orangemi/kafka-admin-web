@@ -27,6 +27,30 @@ Home.router = new VueRouter({
     path: '/partitions',
     component: resolve => require(['pages/partition-list'], resolve)
   }, {
+    name: 'broker-list',
+    path: '/brokers',
+    component: resolve => require(['pages/broker-list'], resolve)
+  }, {
+    name: 'broker-detail',
+    path: '/brokers/:broker',
+    component: resolve => require(['pages/broker-detail'], resolve),
+    children: [{
+      path: '',
+      redirect: {name: 'broker-detail-request'}
+    }, {
+      name: 'broker-detail-configs',
+      path: 'configs',
+      component: resolve => require(['pages/broker-detail/request'], resolve)
+    }, {
+      name: 'broker-detail-request',
+      path: 'request',
+      component: resolve => require(['pages/broker-detail/request'], resolve)
+    }, {
+      name: 'broker-detail-metrics',
+      path: 'metrics',
+      component: resolve => require(['pages/broker-detail/metrics'], resolve)
+    }]
+  }, {
     name: 'topic-detail',
     path: '/topics/:topic',
     component: resolve => require(['pages/topic-detail'], resolve),

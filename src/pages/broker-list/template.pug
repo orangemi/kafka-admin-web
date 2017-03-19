@@ -1,0 +1,38 @@
+div
+  //- .form-group
+    span Show Partitions:
+    bt-switch(v-model='showPartitions' v-on:input='showAllPartitions' v-on:change='showAllPartitions')
+  //- .form-group
+    input.form-control(v-model='filterTopicName' placeholder='topic name ...')
+  table.table.table-hover
+    thead: tr
+      th Broker ID
+      th JMX Port
+      th Timestamp
+      th Endpoints
+      th Host:Port
+      th Version
+      th Action
+    tbody
+      template(v-for='broker in brokers'): tr
+        td {{ broker.broker }}
+        td {{ broker.jmxPort }}
+        td {{ broker.timestamp }} / {{ broker.time }}
+        td: pre {{ broker.endpoints }}
+        td {{ broker.host }}:{{ broker.port }}
+        td {{ broker.version }}
+        td: router-link(v-bind:to='{name: "broker-detail", params: {broker: broker.broker}}') Detail
+        //- tr
+          td(v-bind:colspan='topic.showPartitions ? 3 : 5')
+            router-link(v-bind:to='{name: "topic-detail", params: {topic: topic.topic}}') {{ topic.topic }}
+          td(v-if='topic.showPartitions') {{ topic.partitions.length }}
+          td(v-if='topic.showPartitions') {{ topic.offset }}
+        //- tr(v-for='partition in topic.partitions' v-if='showPartitions')
+        //-   td {{ topic.topic }}
+        //-   td {{ partition.id }}
+        //-   td {{ partition.beginOffset }}
+        //-   td {{ partition.endOffset }}
+        //-   td {{ partition.leader }}
+        //-   td
+        //-     a(v-for='replica in partition.replicas') {{ replica.broker }}
+    

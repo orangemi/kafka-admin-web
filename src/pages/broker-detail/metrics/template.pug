@@ -1,0 +1,21 @@
+div
+  //- .form-group
+    input.form-control(v-model='requestFilter' placeholder='request filter ...')
+  .form-group
+    input.form-control(v-model='metricsFilter' placeholder='metrics filter ...')
+  table.table.table-hover
+    thead: tr
+      td Name
+      td Value
+      td Unit
+      td Total
+      td Show
+    tbody
+      tr(v-for='metric in metrics_')
+        td {{ metric.name }}
+        td {{ metric.Value || metric.OneMinuteRate || metric.Mean }}
+        td {{ metric.EventType }} / {{ metric.RateUnit }}
+        td {{ metric.Count }}
+        td: bt-switch(v-model='metric.show')
+  time-line-chart(v-bind:sqls='sqls')
+  pre {{ sqls }}
