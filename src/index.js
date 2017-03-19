@@ -15,9 +15,17 @@ Vue.component('time-line-chart', TimeLineChart)
 const Home = require('pages/home')
 Home.router = new VueRouter({
   routes: [{
+    name: 'Home',
+    path: '',
+    redirect: {name: 'topic-list'}
+  }, {
     name: 'topic-list',
     path: '/topics',
     component: resolve => require(['pages/topic-list'], resolve)
+  }, {
+    name: 'partition-list',
+    path: '/partitions',
+    component: resolve => require(['pages/partition-list'], resolve)
   }, {
     name: 'topic-detail',
     path: '/topics/:topic',
@@ -46,6 +54,10 @@ Home.router = new VueRouter({
       path: 'metrics',
       component: resolve => require(['pages/topic-detail/metrics'], resolve)
     }]
+  }, {
+    name: 'not-found',
+    path: '*',
+    component: resolve => require(['pages/not-found'], resolve)
   }]
 })
 new Vue(Home).$mount('#app')

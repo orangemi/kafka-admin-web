@@ -6,7 +6,7 @@ module.exports = template({
   data: () => ({
     topics: [],
     filterTopicName: '',
-    showPartitions: false
+    showPartitions: true
   }),
   mounted () {
     this.refreshData()

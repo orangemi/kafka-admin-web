@@ -7,16 +7,20 @@ div
   table.table.table-hover
     thead: tr
       th Topic
-      //- th Partitions
-      //- th Offset
+      th Partition
+      th BeginOffset
+      th EndOffset
+      th Leader
+      th Replicas
     tbody
       template(v-for='topic in topics_')
-        tr
+        //- tr
           td(v-bind:colspan='topic.showPartitions ? 3 : 5')
             router-link(v-bind:to='{name: "topic-detail", params: {topic: topic.topic}}') {{ topic.topic }}
           td(v-if='topic.showPartitions') {{ topic.partitions.length }}
           td(v-if='topic.showPartitions') {{ topic.offset }}
         tr(v-for='partition in topic.partitions' v-if='showPartitions')
+          td {{ topic.topic }}
           td {{ partition.id }}
           td {{ partition.beginOffset }}
           td {{ partition.endOffset }}
