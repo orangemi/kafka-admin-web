@@ -13,7 +13,7 @@ module.exports = template({
   },
   computed: {
     topics_ () {
-      return this.topics.filter(t => this.filterTopicName ? new RegExp(this.filterTopicName).test(t) : true)
+      return this.topics.filter(t => this.filterTopicName ? new RegExp(this.filterTopicName).test(t.topic) : true)
     }
   },
   methods: {

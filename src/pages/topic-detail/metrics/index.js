@@ -22,7 +22,7 @@ module.exports = template({
       this.brokerMetrics.filter(m => m.show).forEach(m => {
         let key = 'Value'
         if (~Object.keys(m).indexOf('OneMinuteRate')) key = 'OneMinuteRate'
-        result[`Broker:${m.broker}:${m.name}`] = `SELECT mean("${key}") FROM "${m.name}" WHERE "broker"='${m.broker}' AND "topic"='${m.topic}' AND time > now() - 1h GROUP BY time(1m)`
+        result[`Broker:${m.broker}:${m.name}`] = `SELECT mean("${key}") FROM "topic-${m.name}" WHERE "broker"='${m.broker}' AND "topic"='${m.topic}' AND time > now() - 1h GROUP BY time(1m)`
       })
       return result
     }

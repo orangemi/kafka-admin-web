@@ -26,7 +26,7 @@ module.exports = template({
         let key = 'Value'
         if (~Object.keys(m).indexOf('OneMinuteRate')) key = 'OneMinuteRate'
         if (~Object.keys(m).indexOf('Mean')) key = 'Mean'
-        result[`${m.request}:${m.name}`] = `SELECT mean("${key}") FROM "${m.name}" WHERE "broker"='${this.broker}' AND "request"='${m.request}' AND time > now() - 1h GROUP BY time(1m)`
+        result[`${m.request}:${m.name}`] = `SELECT mean("${key}") FROM "broker-${m.name}" WHERE "broker"='${this.broker}' AND "request"='${m.request}' AND time > now() - 1h GROUP BY time(1m)`
       })
       return result
     }
