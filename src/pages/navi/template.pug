@@ -1,15 +1,9 @@
 header
-  nav.navbar.navbar-default.navbar-static-top
-    .container_fluid
-      .navbar-header
-        span.navbar-brand Kafka Admin 1.0
-      .collapse.navbar-collapse
-        ul.nav.navbar-nav
-          li(v-bind:class='{active: child == "topics"}')
-            router-link(v-bind:to='{name: "topic-list"}') Topics
-          li(v-bind:class='{active: child == "partitions"}')
-            router-link(v-bind:to='{name: "partition-list"}') Partitions
-          li(v-bind:class='{active: child == "brokers"}')
-            router-link(v-bind:to='{name: "broker-list"}') Brokers
-          li: a Consumers
-          li: a Zookeepers
+  h2 Kafka Admin
+  input.navi-search(v-model='input' placeholder='search')
+  //- pre {{ brokers }}
+  //- pre {{ brokerDetailMetrics }}
+  ul.navi-list
+    navi-item(name='Broker Metrics' v-bind:children='brokerListMetrics')
+    navi-item(name='Brokers' v-bind:children='brokerDetailMetrics')
+    

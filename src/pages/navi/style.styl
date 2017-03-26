@@ -1,0 +1,37 @@
+.navi-list
+  background-color: #fff
+  color: rgba(0, 0, 0, .87)
+  padding: 4px 0
+  margin: 0
+  padding: 8px 0
+  display: flex
+  -ms-flex-flow: column nowrap
+  flex-flow: column nowrap
+  position: relative
+  list-style: none
+
+.navi-item
+  height: auto
+  position: relative
+  z-index: 2
+  font-size: 14px
+  font-weight: 500
+  min-height: 40px
+
+  .name
+    display: flex
+    span
+      flex: 1
+    i.flip
+      transform: rotate(180deg) translate3D(0,0,0)
+
+  .navi-sub
+    margin-left: 10px
+
+  .slide-enter-active
+  .slide-leave-active
+    transition: all .3s ease
+  .slide-enter
+  .slide-leave-active
+    transform: translateX(10px)
+    opacity: 0

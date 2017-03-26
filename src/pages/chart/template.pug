@@ -1,0 +1,4 @@
+div.chart
+  chart-canvas.chart-canvas(v-bind:height='height' v-bind:style='{height: height + "px"}')
+  div.line(v-on:mousedown='startDrag')
+    div.shadow

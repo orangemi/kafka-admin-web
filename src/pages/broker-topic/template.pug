@@ -1,0 +1,82 @@
+div
+  h2 Broker {{ $route.params.broker }}
+
+  div(v-if='part == "topic-replica"')
+    h3 Topic Replica
+    table.table
+      thead: tr
+        th Topic
+        th PartitionsCount
+        th InSyncReplicasCount
+        th UnderReplicated
+      tbody: tr(v-for='topic in topics')
+        td {{ topic.topic }}
+        td {{ Object.values(partitions).filter(p => p.topic === topic.topic).map(p => 1) | sum | number }}
+        td {{ Object.values(partitions).filter(p => p.topic === topic.topic).map(p => p.InSyncReplicasCount) | sum | number }}
+        td {{ Object.values(partitions).filter(p => p.topic === topic.topic).map(p => p.UnderReplicated) | sum | number }}
+
+  div(v-if='part == "topic-log"')
+    h3 Topic Logs
+    table.table
+      thead: tr
+        th Topic
+        th LogEndOffset
+        th LogStartOffset
+        th LogCount
+        th LogSize
+        th NumLogSegments
+      tbody: tr(v-for='topic in topics')
+        td {{ topic.topic }}
+        td {{ Object.values(partitions).filter(p => p.topic === topic.topic).map(p => p.LogEndOffset) | sum | number }}
+        td {{ Object.values(partitions).filter(p => p.topic === topic.topic).map(p => p.LogStartOffset) | sum | number }}
+        td {{ Object.values(partitions).filter(p => p.topic === topic.topic).map(p => p.LogEndOffset - p.LogStartOffset) | sum | number }}
+        td {{ Object.values(partitions).filter(p => p.topic === topic.topic).map(p => p.Size) | sum | number }}
+        td {{ Object.values(partitions).filter(p => p.topic === topic.topic).map(p => p.NumLogSegments) | sum | number }}
+
+  div(v-if='part == "topic-network"')
+    h3 Topic Network IO
+    table.table
+      thead: tr
+        th Topic
+        th(colspan=3) MessagesInPerSec
+        th(colspan=3) BytesInPerSec
+        th(colspan=3) BytesOutPerSec
+        th(colspan=3) BytesRejectedPerSec
+      tbody: tr(v-for='topic in topics')
+        td {{ topic.topic }}
+        td {{ topic.MessagesInPerSecOneMinuteRate | number }}
+        td {{ topic.MessagesInPerSecFiveMinuteRate | number }}
+        td {{ topic.MessagesInPerSecFifteenMinuteRate | number }}
+        td {{ topic.BytesInPerSecOneMinuteRate | number }}
+        td {{ topic.BytesInPerSecFiveMinuteRate | number }}
+        td {{ topic.BytesInPerSecFifteenMinuteRate | number }}
+        td {{ topic.BytesOutPerSecOneMinuteRate | number }}
+        td {{ topic.BytesOutPerSecFiveMinuteRate | number }}
+        td {{ topic.BytesOutPerSecFifteenMinuteRate | number }}
+        td {{ topic.BytesRejectedPerSecOneMinuteRate | number }}
+        td {{ topic.BytesRejectedPerSecFiveMinuteRate | number }}
+        td {{ topic.BytesRejectedPerSecFifteenMinuteRate | number }}
+
+  div(v-if='part == "topic-request"')
+    h3 Topic Requests
+    table.table
+      thead: tr
+        th Topic
+        th(colspan=3) TotalProduceRequestsPerSec
+        th(colspan=3) TotalFetchRequestsPerSec
+        th(colspan=3) FailedProduceRequestsPerSec
+        th(colspan=3) FailedFetchRequestsPerSec
+      tbody: tr(v-for='topic in topics')
+        td {{ topic.topic }}
+        td {{ topic.TotalProduceRequestsPerSecOneMinuteRate | number }}
+        td {{ topic.TotalProduceRequestsPerSecFiveMinuteRate | number }}
+        td {{ topic.TotalProduceRequestsPerSecFifteenMinuteRate | number }}
+        td {{ topic.TotalFetchRequestsPerSecOneMinuteRate | number }}
+        td {{ topic.TotalFetchRequestsPerSecFiveMinuteRate | number }}
+        td {{ topic.TotalFetchRequestsPerSecFifteenMinuteRate | number }}
+        td {{ topic.FailedProduceRequestsPerSecOneMinuteRate | number }}
+        td {{ topic.FailedProduceRequestsPerSecFiveMinuteRate | number }}
+        td {{ topic.FailedProduceRequestsPerSecFifteenMinuteRate | number }}
+        td {{ topic.FailedFetchRequestsPerSecOneMinuteRate | number }}
+        td {{ topic.FailedFetchRequestsPerSecFiveMinuteRate | number }}
+        td {{ topic.FailedFetchRequestsPerSecFifteenMinuteRate | number }}

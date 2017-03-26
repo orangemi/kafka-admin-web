@@ -1,2 +1,58 @@
 // .title
 //   background-color: #2a2730
+.body
+  min-height: 100%
+  display: flex
+  flex: 1
+  flex-flow: row
+  transition: all .4s cubic-bezier(.25,.8,.25,1)
+
+  .navi
+    width: 280px
+    overflow-y: scroll
+    min-height: 100%
+    max-height: 100%
+    box-shadow: 0 2px 4px -1px rgba(0,0,0,0.25)
+
+  .main
+    flex: 1
+    overflow-y: scroll
+    min-height: 100%
+    max-height: 100%
+
+@font-face {
+  font-family: 'Material Icons'
+  font-style: normal
+  font-weight: 400
+  src: url('~assets/woff/material_icon.woff2') format('woff2')
+}
+
+.material-icons
+  font-family: 'Material Icons'
+  font-weight: normal
+  font-style: normal
+  font-size: 24px
+  line-height: 1
+  letter-spacing: normal
+  text-transform: none
+  display: inline-block
+  white-space: nowrap
+  word-wrap: normal
+  direction: ltr
+  -webkit-font-feature-settings: 'liga'
+  -webkit-font-smoothing: antialiased
+
+.md-icon
+  width: 24px
+  min-width: 24px
+  height: 24px
+  min-height: 24px
+  font-size: 24px
+  margin: auto
+  display: -ms-inline-flexbox
+  display: inline-flex
+  -ms-flex-align: center
+  align-items: center
+  fill: currentColor
+  text-rendering: optimizeLegibility
+  vertical-align: middle

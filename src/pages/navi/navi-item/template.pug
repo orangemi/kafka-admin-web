@@ -1,0 +1,17 @@
+li.navi-item
+  div.name
+    router-link(v-if='link' v-bind:to='link' v-on:click='doSomething'): span {{ name }}
+    span(v-else v-on:click='childrenVisible = !childrenVisible') {{ name }}
+    i.material-icons.md-icon(
+      v-if='children && children.length'
+      v-on:click='childrenVisible = !childrenVisible'
+      v-bind:class='{flip: childrenVisible}'
+    ) keyboard_arrow_down
+  transition(name='slide')
+    ul.navi-sub.navi-list(v-if='childrenVisible')
+      navi-item(
+        v-for='child in children'
+        v-bind:name='child.name'
+        v-bind:link='child.link'
+        v-bind:children='child.children'
+      )

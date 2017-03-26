@@ -1,7 +1,6 @@
 'use strict'
 // const c3 = require('c3')
 const ChartJs = require('chart.js')
-const axios = require('axios')
 const moment = require('moment')
 const template = require('./template.pug')
 const colors = ['#0275d8', '#5cb85c', '#5bc0de', '#f0ad4e', '#d9534f']

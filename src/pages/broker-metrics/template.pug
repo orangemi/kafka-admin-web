@@ -1,0 +1,120 @@
+div
+
+  div(v-if='part === "replica-alert"')
+    h3 Replica Manager(Alert)
+    table.table
+      thead: tr
+        th Broker
+        th UnderReplicatedPartitions
+        th OfflinePartitionsCount
+        th ActiveControllerCount
+        th PreferredReplicaImbalanceCount
+      tbody: tr(v-for='broker in brokers')
+        td {{ broker.broker | number }}
+        td {{ broker.UnderReplicatedPartitions | number }}
+        td {{ broker.OfflinePartitionsCount | number }}
+        td {{ broker.ActiveControllerCount | number }}
+        td {{ broker.PreferredReplicaImbalanceCount | number }}
+
+
+  div(v-if='part === "replica-count"')
+    h3 Replica Manager(Count Metrics)
+    table.table
+      thead: tr
+        th Broker
+        th LeaderCount
+        th PartitionCount
+        th MaxLag
+      tbody: tr(v-for='broker in brokers')
+        td {{ broker.broker | number }}
+        td {{ broker.LeaderCount | number }}
+        td {{ broker.PartitionCount | number }}
+        td {{ broker.MaxLag | number }}
+
+
+  div(v-if='part === "replica-rate"')
+    h3 Replica Manager(Rate Metrics)
+    table.table
+      thead: tr
+        th Broker
+        th LeaderElectionRateAndTimeMs
+        th(colspan=3) IsrExpandsPerSec(1m/5m/15m)
+        th(colspan=3) IsrShrinksPerSec(1m/5m/15m)
+      tbody: tr(v-for='broker in brokers')
+        td {{ broker.broker | number }}
+        td {{ broker.LeaderElectionRateAndTimeMs | number }}
+        td {{ broker.IsrExpandsPerSecOneMinuteRate | number }}
+        td {{ broker.IsrExpandsPerSecFiveMinuteRate | number }}
+        td {{ broker.IsrExpandsPerSecFifteenMinuteRate | number }}
+        td {{ broker.IsrShrinksPerSecOneMinuteRate | number }}
+        td {{ broker.IsrShrinksPerSecFiveMinuteRate | number }}
+        td {{ broker.IsrShrinksPerSecFifteenMinuteRate | number }}
+
+
+  div(v-if='part === "io"')
+    h3 Messages/Bytes IO
+    table.table
+      thead: tr
+        th Broker
+        th(colspan=3) MessagesInPerSec(1m/5m/15m)
+        th(colspan=3) BytesInPerSec(1m/5m/15m)
+        th(colspan=3) BytesOutPerSec(1m/5m/15m)
+        th(colspan=3) BytesRejectedPerSec(1m/5m/15m)
+      tbody: tr(v-for='broker in brokers')
+        td {{ broker.broker | number }}
+        td(v-on:click='showChart(broker, "MessagesInPerSec", "OneMinuteRate")') {{ broker.MessagesInPerSecOneMinuteRate | number }}
+        td {{ broker.MessagesInPerSecFiveMinuteRate | number }}
+        td {{ broker.MessagesInPerSecFifteenMinuteRate | number }}
+        td {{ broker.BytesInPerSecOneMinuteRate | number }}
+        td {{ broker.BytesInPerSecFiveMinuteRate | number }}
+        td {{ broker.BytesInPerSecFifteenMinuteRate | number }}
+        td {{ broker.BytesOutPerSecOneMinuteRate | number }}
+        td {{ broker.BytesOutPerSecFiveMinuteRate | number }}
+        td {{ broker.BytesOutPerSecFifteenMinuteRate | number }}
+        td {{ broker.BytesRejectedOneMinuteRate | number }}
+        td {{ broker.BytesRejectedFiveMinuteRate | number }}
+        td {{ broker.BytesRejectedFifteenMinuteRate | number }}
+
+
+  div(v-if='part === "log"')
+    h3 Log / Disk
+    table.table
+      thead: tr
+        th Broker
+        th LogEndOffset
+        th LogCount
+        th LogSize
+        th LogNumLogSegments
+      tbody: tr(v-for='broker in brokers')
+        td {{ broker.broker | number }}
+        td {{ broker.LogEndOffset | number }}
+        td {{ (broker.LogEndOffset - broker.LogStartOffset) | number }}
+        td {{ broker.Size | number }}
+        td {{ broker.NumLogSegments | number }}
+
+
+  div(v-if='part === "request"')
+    h3 Network
+    table.table
+      thead: tr
+        th Broker
+        th(colspan=3) RequestPerSec(1m/5m/15m)
+      tbody: tr(v-for='broker in brokers')
+        td {{ broker.broker | number }}
+        td {{ broker.totalRequestsPerSec && broker.totalRequestsPerSec.OneMinuteRate | number }}
+        td {{ broker.totalRequestsPerSec && broker.totalRequestsPerSec.FiveMinuteRate | number }}
+        td {{ broker.totalRequestsPerSec && broker.totalRequestsPerSec.FifteenMinuteRate | number }}
+
+
+  div(v-if='part === "deplay"')
+    h3 DeplayedOperationPurgatory
+    table.table
+      thead: tr
+        th Broker
+        th(colspan=3) Produce Delay(1m/5m/15m)
+        th(colspan=3) Fetch Delay(1m/5m/15m)
+      tbody: tr(v-for='broker in brokers')
+        td {{ broker.broker | number }}
+
+    //- template(v-for='broker in brokers')
+    //-   pre {{ broker }}

@@ -1,0 +1,27 @@
+div
+  h2 Broker {{ $route.params.broker }}
+
+  h3 Partitions
+  table.table
+    thead: tr
+      th Topic
+      th Partition
+      th LogEndOffset
+      th LogBeginOffset
+      th LogCount
+      th LogSize
+      th NumLogSegments
+      th InSyncReplicasCount
+      th UnderReplicated
+      th ReplicasCount
+    tbody: tr(v-for='partition in partitions')
+      td {{ partition.topic }}
+      td {{ partition.partition }}
+      td {{ partition.LogEndOffset | number }}
+      td {{ partition.LogStartOffset | number }}
+      td {{ partition.LogEndOffset - partition.LogStartOffset | number }}
+      td {{ partition.LogSize | number }}
+      td {{ partition.NumLogSegments | number }}
+      td {{ partition.InSyncReplicasCount | number }}
+      td {{ partition.InSyncReplicasCount | number }}
+      td {{ partition.ReplicasCount | number }}

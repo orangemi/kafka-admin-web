@@ -2,25 +2,25 @@ div
   //- .form-group
     span Show Partitions:
     bt-switch(v-model='showPartitions' v-on:input='showAllPartitions' v-on:change='showAllPartitions')
-  .form-group
-    input.form-control(v-model='filterTopicName' placeholder='topic name ...')
-  table.table.table-hover
-    thead: tr
-      th Topic
-      //- th Partitions
-      //- th Offset
-    tbody
-      template(v-for='topic in topics_')
-        tr
-          td(v-bind:colspan='topic.showPartitions ? 3 : 5')
-            router-link(v-bind:to='{name: "topic-detail", params: {topic: topic.topic}}') {{ topic.topic }}
-          td(v-if='topic.showPartitions') {{ topic.partitions.length }}
-          td(v-if='topic.showPartitions') {{ topic.offset }}
-        tr(v-for='partition in topic.partitions' v-if='showPartitions')
-          td {{ partition.id }}
-          td {{ partition.beginOffset }}
-          td {{ partition.endOffset }}
-          td {{ partition.leader }}
-          td
-            a(v-for='replica in partition.replicas') {{ replica.broker }}
+  //- .form-group
+  //-   input.form-control(v-model='filterTopicName' placeholder='topic name ...')
+  //- table.table.table-hover
+  //-   thead: tr
+  //-     th Topic
+  //-     //- th Partitions
+  //-     //- th Offset
+  //-   tbody
+  //-     template(v-for='topic in topics_')
+  //-       tr
+  //-         td(v-bind:colspan='topic.showPartitions ? 3 : 5')
+  //-           router-link(v-bind:to='{name: "topic-detail", params: {topic: topic.topic}}') {{ topic.topic }}
+  //-         td(v-if='topic.showPartitions') {{ topic.partitions.length }}
+  //-         td(v-if='topic.showPartitions') {{ topic.offset }}
+  //-       tr(v-for='partition in topic.partitions' v-if='showPartitions')
+  //-         td {{ partition.id }}
+  //-         td {{ partition.beginOffset }}
+  //-         td {{ partition.endOffset }}
+  //-         td {{ partition.leader }}
+  //-         td
+  //-           a(v-for='replica in partition.replicas') {{ replica.broker }}
     
