@@ -7,22 +7,14 @@ const template = require('./template.pug')
 const data = require('../../../data')
 module.exports = template({
   props: {
-    height: {type: Number, default: 0},
+    height: {type: Number, default: 200},
     limit: {type: Number, default: 5}
-    // topic: {type: String},
-    // sqls: {type: Object, required: true, default: () => ({})},
-    // startTime: {type: Date, default: () => moment().add(-1, 'hour').toDate()},
-    // endTime: {type: Date, default: () => moment().toDate()},
-    // intervalSeconds: {type: Number, default: 60}, // 1 minute
-    // isRelative: {type: Boolean, default: true},
-    // relativeSeconds: {type: Number, default: 60 * 60}, // 1 hour
-    // limit: {type: Number, default: 10}
   },
   data: () => ({
-    state: data.state
+    // state: data.state,
+    dataSets: data.state.dataSets
   }),
   computed: {
-    dataSets: () => data.state.dataSets,
     startTime: () => data.state.startTime,
     endTime: () => data.state.endTime
   },
@@ -30,27 +22,36 @@ module.exports = template({
     this.generateChart()
   },
   watch: {
+    dataSets: {
+      deep: true,
+      handler () {
+        this.updateDataSets()
+      }
+    },
     height () {
       this.generateChart()
+      this.updateDataSets()
     }
-    // dataSets () {
-    //   this.updateDataSets()
-    // }
   },
   methods: {
     updateDataSets () {
+      this.chart.data.datasets = Object.values(this.dataSets).map(ds => {
+        let data = ds.data
+        let result = Object.assign({}, ds)
+        result.data = data
+        return result
+      })
       this.chart.update()
     },
     generateChart () {
-      let canvas = this.$el
       this.chart = new ChartJs(this.$el, {
         type: 'line',
         data: {
-          datasets: this.dataSets
+          datasets: []
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: true,
+          // responsive: true,
+          // maintainAspectRatio: true,
           pointDotRadius: 0,
           bezierCurve: false,
 

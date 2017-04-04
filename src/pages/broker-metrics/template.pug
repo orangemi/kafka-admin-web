@@ -10,11 +10,11 @@ div
         th ActiveControllerCount
         th PreferredReplicaImbalanceCount
       tbody: tr(v-for='broker in brokers')
-        td {{ broker.broker | number }}
-        td {{ broker.UnderReplicatedPartitions | number }}
-        td {{ broker.OfflinePartitionsCount | number }}
-        td {{ broker.ActiveControllerCount | number }}
-        td {{ broker.PreferredReplicaImbalanceCount | number }}
+        td {{ broker.broker }}
+        td {{ broker.UnderReplicatedPartitions | value | number }}
+        td {{ broker.OfflinePartitionsCount | value | number }}
+        td {{ broker.ActiveControllerCount | value | number }}
+        td {{ broker.PreferredReplicaImbalanceCount | value | number }}
 
 
   div(v-if='part === "replica-count"')
@@ -26,10 +26,10 @@ div
         th PartitionCount
         th MaxLag
       tbody: tr(v-for='broker in brokers')
-        td {{ broker.broker | number }}
-        td {{ broker.LeaderCount | number }}
-        td {{ broker.PartitionCount | number }}
-        td {{ broker.MaxLag | number }}
+        td {{ broker.broker }}
+        td {{ broker.LeaderCount | value | number }}
+        td {{ broker.PartitionCount | value | number }}
+        td {{ broker.MaxLag | value | number }}
 
 
   div(v-if='part === "replica-rate"')
@@ -41,14 +41,14 @@ div
         th(colspan=3) IsrExpandsPerSec(1m/5m/15m)
         th(colspan=3) IsrShrinksPerSec(1m/5m/15m)
       tbody: tr(v-for='broker in brokers')
-        td {{ broker.broker | number }}
-        td {{ broker.LeaderElectionRateAndTimeMs | number }}
-        td {{ broker.IsrExpandsPerSecOneMinuteRate | number }}
-        td {{ broker.IsrExpandsPerSecFiveMinuteRate | number }}
-        td {{ broker.IsrExpandsPerSecFifteenMinuteRate | number }}
-        td {{ broker.IsrShrinksPerSecOneMinuteRate | number }}
-        td {{ broker.IsrShrinksPerSecFiveMinuteRate | number }}
-        td {{ broker.IsrShrinksPerSecFifteenMinuteRate | number }}
+        td {{ broker.broker }}
+        td {{ broker.LeaderElectionRateAndTimeMs | value | number }}
+        td {{ broker.IsrExpandsPerSec | value('OneMinuteRate') | value | number }}
+        td {{ broker.IsrExpandsPerSec | value('FiveMinuteRate') | value | number }}
+        td {{ broker.IsrExpandsPerSec | value('FifteenMinuteRate') | value | number }}
+        td {{ broker.IsrShrinksPerSec | value('OneMinuteRate') | value | number }}
+        td {{ broker.IsrShrinksPerSec | value('FiveMinuteRate') | value | number }}
+        td {{ broker.IsrShrinksPerSec | value('FifteenMinuteRate') | value | number }}
 
 
   div(v-if='part === "io"')
@@ -62,18 +62,18 @@ div
         th(colspan=3) BytesRejectedPerSec(1m/5m/15m)
       tbody: tr(v-for='broker in brokers')
         td {{ broker.broker | number }}
-        td(v-on:click='showChart(broker, "MessagesInPerSec", "OneMinuteRate")') {{ broker.MessagesInPerSecOneMinuteRate | number }}
-        td {{ broker.MessagesInPerSecFiveMinuteRate | number }}
-        td {{ broker.MessagesInPerSecFifteenMinuteRate | number }}
-        td {{ broker.BytesInPerSecOneMinuteRate | number }}
-        td {{ broker.BytesInPerSecFiveMinuteRate | number }}
-        td {{ broker.BytesInPerSecFifteenMinuteRate | number }}
-        td {{ broker.BytesOutPerSecOneMinuteRate | number }}
-        td {{ broker.BytesOutPerSecFiveMinuteRate | number }}
-        td {{ broker.BytesOutPerSecFifteenMinuteRate | number }}
-        td {{ broker.BytesRejectedOneMinuteRate | number }}
-        td {{ broker.BytesRejectedFiveMinuteRate | number }}
-        td {{ broker.BytesRejectedFifteenMinuteRate | number }}
+        td(v-on:click='toggleChart(broker.broker, "MessagesInPerSec", "OneMinuteRate")') {{ broker.MessagesInPerSec | value('OneMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "MessagesInPerSec", "FiveMinuteRate")') {{ broker.MessagesInPerSec | value('FiveMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "MessagesInPerSec", "FifteenMinuteRate")') {{ broker.MessagesInPerSec | value('FifteenMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "BytesInPerSec", "OneMinuteRate")') {{ broker.BytesInPerSec | value('OneMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "BytesInPerSec", "FiveMinuteRate")') {{ broker.BytesInPerSec | value('FiveMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "BytesInPerSec", "FifteenMinuteRate")') {{ broker.BytesInPerSec | value('FifteenMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "BytesOutPerSec", "OneMinuteRate")') {{ broker.BytesOutPerSec | value('OneMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "BytesOutPerSec", "FiveMinuteRate")') {{ broker.BytesOutPerSec | value('FiveMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "BytesOutPerSec", "FifteenMinuteRate")') {{ broker.BytesOutPerSec | value('FifteenMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "BytesRejected", "OneMinuteRate")') {{ broker.BytesRejected | value('OneMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "BytesRejected", "FiveMinuteRate")') {{ broker.BytesRejected | value('FiveMinuteRate') | value | number }}
+        td(v-on:click='toggleChart(broker.broker, "BytesRejected", "FifteenMinuteRate")') {{ broker.BytesRejected | value('FifteenMinuteRate') | value | number }}
 
 
   div(v-if='part === "log"')
@@ -86,11 +86,11 @@ div
         th LogSize
         th LogNumLogSegments
       tbody: tr(v-for='broker in brokers')
-        td {{ broker.broker | number }}
-        td {{ broker.LogEndOffset | number }}
-        td {{ (broker.LogEndOffset - broker.LogStartOffset) | number }}
-        td {{ broker.Size | number }}
-        td {{ broker.NumLogSegments | number }}
+        td {{ broker.broker }}
+        td {{ broker.LogEndOffset | value | number }}
+        td {{ broker.LogEndOffset && broker.LogStartOffset && (broker.LogEndOffset.Value - broker.LogStartOffset.Value) | number }}
+        td {{ broker.Size | value | number }}
+        td {{ broker.NumLogSegments | value | number }}
 
 
   div(v-if='part === "request"')
@@ -101,9 +101,9 @@ div
         th(colspan=3) RequestPerSec(1m/5m/15m)
       tbody: tr(v-for='broker in brokers')
         td {{ broker.broker | number }}
-        td {{ broker.totalRequestsPerSec && broker.totalRequestsPerSec.OneMinuteRate | number }}
-        td {{ broker.totalRequestsPerSec && broker.totalRequestsPerSec.FiveMinuteRate | number }}
-        td {{ broker.totalRequestsPerSec && broker.totalRequestsPerSec.FifteenMinuteRate | number }}
+        td {{ broker.totalRequestsPerSec | value('OneMinuteRate') | value | number }}
+        td {{ broker.totalRequestsPerSec | value('FiveMinuteRate') | value | number }}
+        td {{ broker.totalRequestsPerSec | value('FifteenMinuteRate') | value | number }}
 
 
   div(v-if='part === "deplay"')
