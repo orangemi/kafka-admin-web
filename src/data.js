@@ -14,16 +14,34 @@ module.exports = {
   state: {
     brokers: [],
     dataSets: {}, // [{ label:xx, data:xx}, ...],
+    dataSetFns: [], // [{ label:xx, data:xx}, ...],
     startTime: moment().add(-1, 'hour').toDate(),
-    endTime: moment().toDate()
+    endTime: moment().toDate(),
+    refreshTrigger: false
+  },
+
+  addChart (name, fn, options) {
+    options = options || {}
+    if (this.state.dataSetFns.filter(d => d.name === name).length) return
+    let color = getNextColor()
+    this.state.dataSetFns.push({
+      name: name,
+      fn: fn,
+      dataSet: {
+        label: name,
+        data: [],
+        fill: false,
+        lineTension: 0,
+        fillColor: color,
+        borderColor: color,
+        backgroundColor: color
+      }
+    })
   },
 
   deleteChart (name, options) {
-    let chart = this.getChart(name, {create: false})
-    if (chart && chart.switcher) {
-      chart.switcher.show = false
-    }
-    Vue.delete(this.state.dataSets, name)
+    this.state.dataSetFns = this.state.dataSetFns.filter(d => d.name !== name)
+    console.log(this.state.dataSetFns)
   },
   getChart (name, options) {
     options = options || {}
@@ -49,16 +67,10 @@ module.exports = {
   },
 
   getBrokers () {
-    if (this.state.brokers.length) return new Promise(resolve => {
-      console.log('get brokers here', this.state.brokers)
-      resolve(this.state.brokers)
-    })
     return new Promise(resolve => {
+      if (this.state.brokers.length) return resolve(this.state.brokers)
       console.log('GET api/brokers')
       axios.get('api/brokers').then(resp => {
-        // console.log(this.state.brokers, this)
-        // Vue.set(this, 'brokers', resp.data)
-        // console.log(this.state.brokers, this)
         this.state.brokers = resp.data
         resolve(this.state.borkers)
       })

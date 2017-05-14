@@ -9,48 +9,62 @@ module.exports = template({
   props: {
     height: {type: Number, default: 200},
     limit: {type: Number, default: 5}
+    // startTime: {type: Date, default: () => moment().add(-1, 'h').toDate()},
+    // endTime: {type: Date, default: () => moment().toDate()}
   },
   data: () => ({
-    // state: data.state,
     dataSets: data.state.dataSets
   }),
   computed: {
     startTime: () => data.state.startTime,
-    endTime: () => data.state.endTime
+    endTime: () => data.state.endTime,
+    refreshTrigger: () => data.state.refreshTrigger,
+    dataSetFns: () => data.state.dataSetFns
   },
   mounted () {
     this.generateChart()
   },
   watch: {
-    dataSets: {
-      deep: true,
-      handler () {
-        this.updateDataSets()
-      }
+    dataSetFns () {
+      this.updateDataSets()
     },
     height () {
+      this.generateChart()
+      this.updateDataSets()
+    },
+    startTime () {
+      this.generateChart()
+      this.updateDataSets()
+    },
+    endTime () {
+      this.generateChart()
+      this.updateDataSets()
+    },
+    refreshTrigger () {
       this.generateChart()
       this.updateDataSets()
     }
   },
   methods: {
     updateDataSets () {
-      this.chart.data.datasets = Object.values(this.dataSets).map(ds => {
-        let data = ds.data
-        let result = Object.assign({}, ds)
-        result.data = data
-        return result
+      // TODO: refreshData should trigger dataSets's functions to generate data
+      this.chart.data.datasets = this.dataSetFns.map(dataSetFn => {
+        let dataSet = dataSetFn.dataSet
+        dataSetFn.fn(this.startTime, this.endTime, this.intervalTime).then(res => {
+          dataSet.data = res
+          this.chart.update()
+        })
+        return dataSet
       })
       this.chart.update()
     },
     generateChart () {
+      if (this.chart) this.chart.destroy()
       this.chart = new ChartJs(this.$el, {
         type: 'line',
-        data: {
-          datasets: []
-        },
+        data: {datasets: []},
         options: {
-          // responsive: true,
+          responsive: true,
           // maintainAspectRatio: true,
           pointDotRadius: 0,
           bezierCurve: false,

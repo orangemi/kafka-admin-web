@@ -48,15 +48,17 @@ module.exports = template({
         return
       }
 
-      let chart = data.getChart(chartName, {switcher: switcher})
-      switcher.color = chart.fillColor
+      // let chart = data.getChart(chartName, {switcher: switcher})
+      // switcher.color = chart.fillColor
 
-      axios.post('api/influxdb/query', {
-        q: `SELECT Mean("${field}") FROM "${table}" WHERE "broker"='${broker}' AND "topic"='' AND time > now() - 1h GROUP BY time(5m)`
-      }).then(resp => {
-        if (!resp.data || !resp.data[0] || !resp.data[0].series || !resp.data[0].series[0]) throw new Error('influxdb response error')
-        let series = resp.data[0].series[0]
-        chart.data = series.values.map(v => ({x: new Date(v[0]), y: v[1]}))
+      data.addChart(chartName, function (startTime, endTime, interval) {
+        return axios.post('api/influxdb/query', {
+          q: `SELECT Mean("${field}") FROM "${table}" WHERE "broker"='${broker}' AND "topic"='' AND time > now() - 1h GROUP BY time(1m)`
+        }).then(resp => {
+          if (!resp.data || !resp.data[0] || !resp.data[0].series || !resp.data[0].series[0]) throw new Error('influxdb response error')
+          let series = resp.data[0].series[0]
+          return series.values.map(v => ({x: new Date(v[0]), y: v[1]}))
+        })
       })
     },
     fetchData () {

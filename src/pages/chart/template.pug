@@ -1,4 +1,6 @@
 div.chart
-  chart-canvas.chart-canvas(v-bind:height='height')
+  div
+    button(v-on:click='refreshChart') refresh
+  chart-canvas.chart-canvas(v-bind:height='height' v-bind:starTime='startTime' v-bind:endTime='endTime')
   div.line(v-on:mousedown='startDrag')
     div.shadow
